@@ -9,11 +9,13 @@ class adxl337 {
 public:
 void setPins(int x, int y, int z);
 void getAccel(float * result);
+float getPitch(float * accel);
+float getRoll(float * accel);
 private:
 void takeRawMeasurement();
 void takeScaledMeasurement();
 float mapf(float x, float in_min, float in_max, float out_min, float out_max);
-int scale = 200; // 200 (±200g) for adxl337
+int scale = 3; // 3 (±3g) for adxl337
 int xPin_;
 int yPin_;
 int zPin_;
