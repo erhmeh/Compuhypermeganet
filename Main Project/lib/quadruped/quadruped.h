@@ -7,18 +7,17 @@
 
 class quadruped {
     public:
-        void setPins(int pin);
+        void setPins(int pins[]);
+        void attachServos();
         /* Movement functions */
         void standUp();
         void lowerDown();
         void moveForward(int steps);
         void moveBackward(int steps);
     private:
-        Servo topLeft_[2];
-        Servo topRight_[2];
-        Servo bottomLeft_[2];
-        Servo bottomRight_[2];
-        int pin_;
+        /* 0-1=top-left, 2-3=top-right, 4-5=bottom-left, 6-7=bottom-right */
+        Servo servos[8]; 
+        int pins_[8];
 };
 
 #endif
