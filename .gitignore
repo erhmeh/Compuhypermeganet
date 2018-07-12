@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+
+Main Project/\.vscode/
+
+Main Project/\.DS_Store
