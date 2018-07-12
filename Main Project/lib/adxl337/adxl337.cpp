@@ -26,9 +26,10 @@ void adxl337::takeScaledMeasurement()
     zScaled_ = mapf(zRaw_, 0, 675, -scale, scale);
 }
 
+// Accepts a float* to an array and fills the array with the scaled values for acceleration
 void adxl337::getAccel(float * result)
 {
-    takeScaledMeasurement();
+    takeScaledMeasurement(); // make sure that the value being returned is the most up to date
     result[0] = xScaled_;
     result[1] = yScaled_;
     result[2] = zScaled_;

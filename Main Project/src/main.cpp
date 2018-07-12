@@ -56,6 +56,7 @@ void initQuadruped() {
     quad.attachServos();
 }
 
+// Updates the acceleration array when called by the timer
 void updateAcceleration()
 {
     accel.getAccel(recentAccel);
@@ -64,14 +65,14 @@ void updateAcceleration()
 // main setup
 void setup()
 {
-    Serial.begin(115200);                                                             // really fast serial ftw
+    Serial.begin(115200);// really fast serial ftw
 }
 
 // main loop
 void loop()
 {
     FlexiTimer2::set(100, 1.0 / 1000, updateAcceleration); // call every 100 1ms "ticks"
-    FlexiTimer2::start();
+    FlexiTimer2::start(); // start the timer
     DEBUG_PRINT("Pitch: ");
     DEBUG_PRINTLN(accel.getPitch(recentAccel));
 }
