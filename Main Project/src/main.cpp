@@ -11,10 +11,10 @@
 #include "FlexiTimer2.h"
 
 // Remove the Serial writing for faster processing
-#define DEBUG_PRINT(x)      Serial.print(x)
-#define DEBUG_WRITE(x)      Serial.write(x)
-#define DEBUG_PRINTDEC(x)   Serial.print(x, DEC)
-#define DEBUG_PRINTLN(x)    Serial.println(x)
+#define DEBUG_PRINT(x) Serial.print(x)
+#define DEBUG_WRITE(x) Serial.write(x)
+#define DEBUG_PRINTDEC(x) Serial.print(x, DEC)
+#define DEBUG_PRINTLN(x) Serial.println(x)
 #define DEBUG_PRINTLNHEX(x) Serial.println(x, HEX)
 
 // IO pins
@@ -23,7 +23,7 @@
 #define ADXL337_Y_PIN 13
 #define ADXL337_Z_PIN 14
 
-/* Servo Pins */
+/* Quad Servo Pins */
 #define L4_1 0
 #define L4_2 1
 #define L3_1 2
@@ -33,7 +33,12 @@
 #define L1_1 6
 #define L1_2 7
 
-adxl337 accel; // Accelerometer object
+/* Platform Servo Pins*/
+#define S1 12
+#define S2 24
+#define S3 25
+
+adxl337 accel;  // Accelerometer object
 quadruped quad; // Quadruped object
 
 /* Parse this array to the the accelerometer class to fill it with most recent
@@ -50,7 +55,8 @@ void initADXL337()
 }
 
 // Initialises quadruped and attaches servos
-void initQuadruped() {
+void initQuadruped()
+{
     int pins[] = {L4_1, L4_2, L3_1, L3_2, L2_1, L2_2, L1_1, L1_2};
     quad.setPins(pins);
     quad.attachServos();
@@ -62,17 +68,46 @@ void updateAcceleration()
     accel.getAccel(recentAccel);
 }
 
+void turnToPoint(int i)
+{
+    quad.specificMovement(0, i);
+}
+
 // main setup
 void setup()
 {
-    Serial.begin(115200);// really fast serial ftw
+    Serial.begin(9600); // really fast serial ftw
+    //initQuadruped();
 }
 
 // main loop
 void loop()
 {
-    FlexiTimer2::set(100, 1.0 / 1000, updateAcceleration); // call every 100 1ms "ticks"
-    FlexiTimer2::start(); // start the timer
-    DEBUG_PRINT("Pitch: ");
-    DEBUG_PRINTLN(accel.getPitch(recentAccel));
+    // FlexiTimer2::set(100, 1.0 / 1000, updateAcceleration); // call every 100 1ms "ticks"
+    // FlexiTimer2::start(); // start the timer
+    // DEBUG_PRINT("Pitch: ");
+    // DEBUG_PRINTLN(accel.getPitch(recentAccel));
+    if (Serial.available())
+    {
+        String str;
+        while (Serial.available())
+        {
+            char c = Serial.read();
+            if (c != '\n')
+            {
+                str.append(c);
+            }
+            else
+            {
+                break;
+            }
+            delay(500);
+        }
+        int i = str.toInt();
+        //turnToPoint(i);
+        myServo.write(i);
+        DEBUG_PRINT("Rotating to: ");
+        DEBUG_PRINTLN(i);
+        delay(5);
+    }
 }
