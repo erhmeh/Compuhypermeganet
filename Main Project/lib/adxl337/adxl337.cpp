@@ -39,3 +39,15 @@ float adxl337::mapf(float x, float in_min, float in_max, float out_min, float ou
 {
     return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
+
+float adxl337::getPitch(float * accel){
+    float pitch = atan(accel[0] / sqrt(pow(accel[1], 2) + pow(accel[2], 2)));
+    pitch = pitch * (180.0 / PI);
+    return pitch;
+}
+
+float adxl337::getRoll(float * accel){
+    float roll = atan(accel[1] / sqrt(pow(accel[0], 2) + pow(accel[2], 2)));
+    roll = roll * (180.0 / PI);
+    return roll;
+}

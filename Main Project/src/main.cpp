@@ -7,6 +7,7 @@
 
 #include "Arduino.h"
 #include "adxl337.h"
+#include "FlexiTimer2.h"
 
 // Remove the Serial writing for faster processing
 #define DEBUG_PRINT(x)      Serial.print(x)
@@ -35,6 +36,10 @@ void initADXL337()
     accel.setPins(ADXL337_X_PIN, ADXL337_Y_PIN, ADXL337_Z_PIN);
 }
 
+void updateAcceleration(){
+    accel.getAccel(recentAccel);
+}
+
 // main setup
 void setup()
 {
@@ -44,4 +49,8 @@ void setup()
 // main loop
 void loop()
 {
+    FlexiTimer2::set(100, 1.0 / 1000, updateAcceleration); // call every 100 1ms "ticks"
+    FlexiTimer2::start();
+    DEBUG_PRINT("Pitch: ");
+    DEBUG_PRINTLN(accel.getPitch(recentAccel));
 }
