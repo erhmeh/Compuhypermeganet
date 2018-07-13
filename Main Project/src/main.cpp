@@ -9,6 +9,7 @@
 #include "adxl337.h"
 #include "quadruped.h"
 #include "FlexiTimer2.h"
+#include "platform.h"
 
 // Remove the Serial writing for faster processing
 #define DEBUG_PRINT(x) Serial.print(x)
@@ -38,8 +39,15 @@
 #define S2 24
 #define S3 25
 
+// Prototype functions
+void initADXL337();
+void initQuadruped();
+void initPlatform();
+void updateAcceleration();
+
 adxl337 accel;  // Accelerometer object
 quadruped quad; // Quadruped object
+platform plat;  // Platform object
 
 /* Parse this array to the the accelerometer class to fill it with most recent
    acceleration readings
@@ -62,52 +70,35 @@ void initQuadruped()
     quad.attachServos();
 }
 
+// Initialises the platform servos and resets them to 45 degrees
+void initPlatform()
+{
+    int pins[] = {S1, S2, S3};
+    plat.initPlatform(pins);
+}
+
 // Updates the acceleration array when called by the timer
 void updateAcceleration()
 {
     accel.getAccel(recentAccel);
 }
+/******************************************************
+ *                  TEST FUNCTION
+ * ***************************************************/
+void servoPlatTest(){
 
-void turnToPoint(int i)
-{
-    quad.specificMovement(0, i);
 }
 
 // main setup
 void setup()
 {
     Serial.begin(9600); // really fast serial ftw
-    //initQuadruped();
+    // initQuadruped();
+    // FlexiTimer2::set(100, 1.0 / 1000, updateAcceleration); // call every 100 1ms "ticks"
+    // FlexiTimer2::start();                                  // start the timer
 }
 
 // main loop
 void loop()
 {
-    // FlexiTimer2::set(100, 1.0 / 1000, updateAcceleration); // call every 100 1ms "ticks"
-    // FlexiTimer2::start(); // start the timer
-    // DEBUG_PRINT("Pitch: ");
-    // DEBUG_PRINTLN(accel.getPitch(recentAccel));
-    if (Serial.available())
-    {
-        String str;
-        while (Serial.available())
-        {
-            char c = Serial.read();
-            if (c != '\n')
-            {
-                str.append(c);
-            }
-            else
-            {
-                break;
-            }
-            delay(500);
-        }
-        int i = str.toInt();
-        //turnToPoint(i);
-        myServo.write(i);
-        DEBUG_PRINT("Rotating to: ");
-        DEBUG_PRINTLN(i);
-        delay(5);
-    }
 }

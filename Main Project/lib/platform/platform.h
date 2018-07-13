@@ -6,13 +6,14 @@
 
 class platform
 {
-  public:
-    void attachServos(int *pins);
-    void moveTo(int servo, int angle);
-  private:
-    Servo frontServo_;
-    Servo leftServo_;
-    Servo rightServo_;
+public:
+  void moveTo(int servo, int angle);
+  void initPlatform(int *pins);
+private:
+  void attachServos(int *pins);
+  Servo frontServo_;
+  Servo leftServo_;
+  Servo rightServo_;
 };
 
 #endif
