@@ -85,14 +85,89 @@ void updateAcceleration()
 /******************************************************
  *                  TEST FUNCTION
  * ***************************************************/
-void servoPlatTest(){
-
+void servoPlatTest()
+{
+    if (Serial.available())
+    {
+        String str = "";
+        while (true)
+        {
+            if (Serial.available())
+            {
+                char c = Serial.read();
+                if (isAlphaNumeric(c))
+                {
+                    str.append(c);
+                    Serial.write(c);
+                }
+                else
+                {
+                    DEBUG_PRINTLN();
+                    break;
+                }
+            }
+        }
+        char selectedServo = str.charAt(0);
+        switch (selectedServo)
+        {
+        case 'f':
+            DEBUG_PRINTLN("Front servo selected");
+            break;
+        case 'l':
+            DEBUG_PRINTLN("Left servo selected");
+            break;
+        case 'r':
+            DEBUG_PRINTLN("Right servo selected");
+            break;
+        default:
+            DEBUG_PRINTLN("Invalid char entered");
+            return;
+        }
+        DEBUG_PRINT("Please input your desired angle: ");
+        while (!Serial.available())
+        {
+            // do nothing; wait until serial input is detected
+        }
+        str = "";
+        while (true)
+        {
+            if (Serial.available())
+            {
+                char c = Serial.read();
+                if (isDigit(c))
+                {
+                    str.append(c);
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+        int angle = str.toInt();
+        DEBUG_PRINTLN(str);
+        switch (selectedServo)
+        {
+        case 'f':
+            plat.moveTo(1, angle);
+            break;
+        case 'l':
+            plat.moveTo(2, angle);
+            break;
+        case 'r':
+            plat.moveTo(3, angle);
+            break;
+        default:
+            return;
+        }
+    }
 }
 
 // main setup
 void setup()
 {
-    Serial.begin(9600); // really fast serial ftw
+    Serial.begin(9600);
+    initPlatform();
     // initQuadruped();
     // FlexiTimer2::set(100, 1.0 / 1000, updateAcceleration); // call every 100 1ms "ticks"
     // FlexiTimer2::start();                                  // start the timer
@@ -101,4 +176,5 @@ void setup()
 // main loop
 void loop()
 {
+    servoPlatTest();
 }
