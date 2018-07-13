@@ -168,6 +168,8 @@ void setup()
 {
     Serial.begin(9600);
     initPlatform();
+    randomSeed(analogRead(0));
+    delay(5000);
     // initQuadruped();
     // FlexiTimer2::set(100, 1.0 / 1000, updateAcceleration); // call every 100 1ms "ticks"
     // FlexiTimer2::start();                                  // start the timer
@@ -176,5 +178,9 @@ void setup()
 // main loop
 void loop()
 {
-    servoPlatTest();
+    plat.moveTo(1, random(10, 80));
+    plat.moveTo(2, random(10, 80));
+    plat.moveTo(3, random(10, 80));
+    delay(5000);
+    //servoPlatTest();
 }
