@@ -11,7 +11,7 @@ void quadruped::setPins(int pins[]) {
 
 /* Attaches the servos to the pins */
 void quadruped::attachServos() {
-    for(int i=0;i<7;i++) {
+    for(int i=0; i<7; i++) {
         servos[i].attach(pins_[i]);
     }
 }
