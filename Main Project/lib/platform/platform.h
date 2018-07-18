@@ -9,6 +9,7 @@ class platform
 public:
   void moveTo(int servo, int angle);
   void initPlatform(int *pins);
+
 private:
   void attachServos(int *pins);
   Servo frontServo_;
