@@ -19,10 +19,6 @@
 #define DEBUG_PRINTLNHEX(x) Serial.println(x, HEX)
 
 // IO pins
-/* Accelerometer Pins */
-#define ADXL337_X_PIN 12
-#define ADXL337_Y_PIN 13
-#define ADXL337_Z_PIN 14
 
 /* Quad Servo Pins */
 #define L4_1 0
@@ -56,12 +52,6 @@ platform plat;  // Platform object
  */
 float recentAccel[3];
 
-// Initialises the accelerometer pins
-void initADXL337()
-{
-    accel.setPins(ADXL337_X_PIN, ADXL337_Y_PIN, ADXL337_Z_PIN);
-}
-
 // Initialises quadruped and attaches servos
 void initQuadruped()
 {
@@ -90,7 +80,7 @@ void setup()
     initPlatform();
     randomSeed(analogRead(0));
     initQuadruped();
-    FlexiTimer2::set(100, 1.0 / 1000, updateAcceleration); // call every 100 1ms "ticks"
+    FlexiTimer2::set(200, 1.0 / 1000, updateAcceleration); // call every 200 1ms "ticks" (50hz)
     FlexiTimer2::start();                                  // start the timer
 }
 
