@@ -4,6 +4,10 @@
 #include <Arduino.h>
 #include <Servo.h>
 
+typedef struct {
+  float x, y, z;
+} position_t;
+
 class quadruped
 {
 public:
@@ -17,12 +21,15 @@ public:
 
 private:
   /* 0-1=top-left, 2-3=top-right, 4-5=bottom-left, 6-7=bottom-right */
+  /* even nums (including 0) are hip servos, odd nums are tib-fem servos */
   Servo servos[8];
+  /* stores angles of each servo */
+  float angles[8];
   int pins_[8];
-  /* dimensions of leg components */
-  const float femur_ = 80.0;
-  const float tibia_ = 100.0;
-  const float coxa_ = 20.0; /* placeholder value, could be changed */
+  /* dimensions of leg components in mm */
+  const float femur_ = 49.5;
+  const float tibia_ = 141.89;
+  const float coxa_ = 27.85; 
 };
 
 #endif

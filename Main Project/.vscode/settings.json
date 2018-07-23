@@ -6,5 +6,9 @@
     "files.associations": {
         "*.cpp": "cpp",
         "array": "cpp"
+    },
+    "terminal.integrated.env.osx": {
+        "PATH": "/Users/Patrick/.platformio/penv/bin:/Users/Patrick/.platformio/penv:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/TeX/texbin",
+        "PLATFORMIO_CALLER": "vscode"
     }
 }

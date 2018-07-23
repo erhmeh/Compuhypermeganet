@@ -56,6 +56,10 @@ platform plat;  // Platform object
  */
 float recentAccel[3];
 
+/* store current and target coordinates for legs */
+position_t current_coordinates[8];
+position_t target_coordinates[8];
+
 // Initialises quadruped and attaches servos
 void initQuadruped()
 {
