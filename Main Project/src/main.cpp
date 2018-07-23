@@ -6,10 +6,12 @@
  */
 
 #include "Arduino.h"
-#include "adxl337.h"
-#include "quadruped.h"
 #include "FlexiTimer2.h"
+#include "MatrixMath.h"
+#include "adxl337.h"
 #include "platform.h"
+#include "quadruped.h"
+
 
 // Remove the Serial writing for faster processing
 #define DEBUG_PRINT(x) Serial.print(x)
@@ -70,34 +72,32 @@ void initQuadruped()
 }
 
 // Initialises the platform servos and resets them to 45 degrees
-void initPlatform()
-{
-    int pins[] = {S1, S2, S3};
-    plat.initPlatform(pins);
+void initPlatform() {
+  int pins[] = {S1, S2, S3};
+  plat.initPlatform(pins);
 }
 
 // Updates the acceleration array when called by the timer
-void tick()
-{
-    accel.getAccel(recentAccel);
-    plat.calculateAngles(accel.getPitch(recentAccel), accel.getRoll(recentAccel));
-    plat.updateServos();
+void tick() {
+  accel.getAccel(recentAccel);
+  // plat.calculateAngles(accel.getPitch(recentAccel)    ,
+  // accel.getRoll(recentAccel));
+  plat.updateServos();
 }
 
 // main setup
-void setup()
-{
-    Serial.begin(9600);
-    pinMode(D1, OUTPUT);
-    pinMode(D2, OUTPUT);
-    initPlatform();
-    randomSeed(analogRead(0));
-    initQuadruped();
-    FlexiTimer2::set(200, 1.0 / 1000, tick); // call every 200 1ms "ticks" (50hz)
-    FlexiTimer2::start();                    // start the timer
+void setup() {
+  Serial.begin(9600);
+  delay(10000);
+  pinMode(D1, OUTPUT);
+  pinMode(D2, OUTPUT);
+  initPlatform();
+  plat.calculateAngles(30.0, 60.0);
+  randomSeed(analogRead(0));
+  initQuadruped();
+  FlexiTimer2::set(200, 1.0 / 1000, tick); // call every 200 1ms "ticks" (50hz)
+  FlexiTimer2::start();                    // start the timer
 }
 
 // main loop
-void loop()
-{
-}
+void loop() {}
