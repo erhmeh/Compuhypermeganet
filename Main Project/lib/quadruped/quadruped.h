@@ -5,7 +5,7 @@
 #include <Servo.h>
 
 typedef struct {
-  float x, y, z;
+  double x, y, z;
 } position_t;
 
 class quadruped
@@ -13,6 +13,9 @@ class quadruped
 public:
   void setPins(int pins[]);
   void attachServos();
+  void startingPosition();
+  /* calculates required angle for servo, 0 for hip (gamma) and 1 for tib-fem (alpha) */
+  double calculateAngle(position_t target_effector_coordinate, int servo_type);
   /* Movement functions */
   void standUp();
   void lowerDown();
