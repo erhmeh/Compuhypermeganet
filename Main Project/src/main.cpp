@@ -88,6 +88,13 @@ void tick()
   digitalWrite(D1, HIGH);
   accel.getAccel(recentAccel);
   plat.calculateAngles(accel.getPitch(recentAccel), accel.getRoll(recentAccel));
+  DEBUG_PRINT("Servo Angles: ");
+  DEBUG_PRINT(" ");
+  DEBUG_PRINT(plat.servoAngles_[0]);
+  DEBUG_PRINT(" ");
+  DEBUG_PRINT(plat.servoAngles_[1]);
+  DEBUG_PRINT(" ");
+  DEBUG_PRINTLN(plat.servoAngles_[2]);
   plat.updateServos();
   digitalWrite(D1, LOW);
 }

@@ -15,12 +15,14 @@ public:
   int servoAngles_[3];
 
 private:
+  void attachServos(int *pins);
   double matrix[3][3];
   const double frontServoVec_[3] = {0.0, -1.0, 0.0};
   const double leftServoVec_[3] = {1.0, -1.0, 0.0};
   const double rightServoVec_[3] = {-1.0, 1.0, 0.0};
   const double platHeight_[3] = {0.0, 0.0, 3.0};
-  void attachServos(int *pins);
+  const double armLength_ = 1.0;
+  const double pistonLength_ = 1.0;
   double calcAngle1_;
   double calcAngle2_;
   double calcAngle3_;
@@ -30,6 +32,9 @@ private:
   double liFrontMag_;
   double liLeftMag_;
   double liRightMag_;
+  double e1_;
+  double e2_;
+  double e3_;
   Servo frontServo_;
   Servo leftServo_;
   Servo rightServo_;

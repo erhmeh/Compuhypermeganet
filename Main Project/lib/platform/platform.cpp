@@ -105,12 +105,24 @@ void platform::calculateAngles(double pitch, double roll)
                       (vecSum2_[2] * vecSum2_[2]));
     liRightMag_ = sqrt((vecSum3_[0] * vecSum3_[0]) + (vecSum3_[1] * vecSum3_[1]) +
                        (vecSum3_[2] * vecSum3_[2]));
-    // Serial.print("Front height: ");
-    // Serial.println(liFrontMag_);
-    // Serial.print("Left height: ");
-    // Serial.println(liLeftMag_);
-    // Serial.print("Right height: ");
-    // Serial.println(liRightMag_);
+    e1_ = 45 + 57.2958 * cos(((liFrontMag_ * liFrontMag_) + (armLength_ * armLength_) -
+                         (pistonLength_ * pistonLength_)) /
+                        (2 * armLength_ * liFrontMag_));
+    e2_ = 45 + 57.2958 * cos(((liLeftMag_ * liLeftMag_) + (armLength_ * armLength_) -
+                         (pistonLength_ * pistonLength_)) /
+                        (2 * armLength_ * liLeftMag_));
+    e3_ = 45 + 57.2958 * cos(((liRightMag_ * liRightMag_) + (armLength_ * armLength_) -
+                         (pistonLength_ * pistonLength_)) /
+                        (2 * armLength_ * liRightMag_));
+    // Serial.print("Front servo angle: ");
+    // Serial.println(e1_);
+    // Serial.print("Left servo angle: ");
+    // Serial.println(e2_);
+    // Serial.print("Right servo angle: ");
+    // Serial.println(e3_);
+    servoAngles_[0] = e1_;
+    servoAngles_[1] = e2_;
+    servoAngles_[2] = e3_;
 }
 
 // Repositions the servos to a predefined angle
