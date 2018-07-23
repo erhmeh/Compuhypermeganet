@@ -36,3 +36,17 @@ void platform::moveTo(int servo, int angle)
         break;
     }
 }
+
+// Recalculates angles and populates array with target angles
+void platform::calculateAngles(float pitch, float yaw)
+{
+    // Dana todo one day lol
+}
+
+// Repositions the servos to a predefined angle
+void platform::updateServos()
+{
+    moveTo(1, angles_[0]);
+    moveTo(2, angles_[1]);
+    moveTo(3, angles_[2]);
+}

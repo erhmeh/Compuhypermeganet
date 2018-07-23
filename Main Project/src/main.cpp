@@ -35,6 +35,10 @@
 #define S2 24
 #define S3 25
 
+/* Digital IO Testing Pins */
+#define D1 13
+#define D2 14
+
 // Prototype functions
 void initADXL337();
 void initQuadruped();
@@ -68,20 +72,24 @@ void initPlatform()
 }
 
 // Updates the acceleration array when called by the timer
-void updateAcceleration()
+void tick()
 {
     accel.getAccel(recentAccel);
+    plat.calculateAngles(accel.getPitch(recentAccel), accel.getRoll(recentAccel));
+    plat.updateServos();
 }
 
 // main setup
 void setup()
 {
     Serial.begin(9600);
+    pinMode(D1, OUTPUT);
+    pinMode(D2, OUTPUT);
     initPlatform();
     randomSeed(analogRead(0));
     initQuadruped();
-    FlexiTimer2::set(200, 1.0 / 1000, updateAcceleration); // call every 200 1ms "ticks" (50hz)
-    FlexiTimer2::start();                                  // start the timer
+    FlexiTimer2::set(200, 1.0 / 1000, tick); // call every 200 1ms "ticks" (50hz)
+    FlexiTimer2::start();                    // start the timer
 }
 
 // main loop
