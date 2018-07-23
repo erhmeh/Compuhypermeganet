@@ -6,7 +6,11 @@
     "files.associations": {
         "*.cpp": "cpp",
         "array": "cpp",
-        "cmath": "cpp"
+        "cmath": "cpp",
+        "deque": "cpp",
+        "unordered_map": "cpp",
+        "vector": "cpp",
+        "initializer_list": "cpp"
     },
     "terminal.integrated.env.osx": {
         "PATH": "/Users/Patrick/.platformio/penv/bin:/Users/Patrick/.platformio/penv:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/TeX/texbin",

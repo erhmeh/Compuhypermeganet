@@ -8,9 +8,14 @@
 #include "Arduino.h"
 #include "FlexiTimer2.h"
 #include "MatrixMath.h"
+#include "SD.h"
+#include "SPI.h"
 #include "adxl337.h"
 #include "platform.h"
 #include "quadruped.h"
+#include "SDConfigFile.h"
+
+File alfredConfig;
 
 // Remove the Serial writing for faster processing
 #define DEBUG_PRINT(x) Serial.print(x)
@@ -91,10 +96,18 @@ void tick()
 void setup()
 {
   Serial.begin(9600);
+  delay(2000);
+  Serial.print("Initializing SD card...");
+
+  if (!SD.begin(BUILTIN_SDCARD))
+  {
+    Serial.println("initialization failed!");
+    return;
+  }
+  Serial.println("initialization done.");
   pinMode(D1, OUTPUT);
   pinMode(D2, OUTPUT);
   initPlatform();
-  plat.calculateAngles(30.0, 60.0);
   randomSeed(analogRead(0));
   initQuadruped();
   FlexiTimer2::set(20, 1.0 / 1000, tick); // call every 200 1ms "ticks" (50hz)

@@ -54,21 +54,69 @@ void platform::calculateAngles(double pitch, double roll)
     matrix[2][0] = -sin(pitchR);
     matrix[2][1] = cos(pitchR) * sin(rollR);
     matrix[2][2] = cos(rollR) * cos(pitchR);
-    double vector[3];
-    // @TODO Generate vector
-    double c[3];
-    c[0] = matrix[0][0] * vector[0] + matrix[0][1] * vector[1] +
-           matrix[0][2] * vector[2];
-    c[1] = matrix[1][0] * vector[0] + matrix[1][1] * vector[1] +
-           matrix[1][2] * vector[2];
-    c[2] = matrix[2][0] * vector[0] + matrix[2][1] * vector[1] +
-           matrix[2][2] * vector[2];
+    vecSum1_[0] = matrix[0][0] * frontServoVec_[0] +
+                  matrix[0][1] * frontServoVec_[1] +
+                  matrix[0][2] * frontServoVec_[2];
+    vecSum1_[1] = matrix[1][0] * frontServoVec_[0] +
+                  matrix[1][1] * frontServoVec_[1] +
+                  matrix[1][2] * frontServoVec_[2];
+    vecSum1_[2] = matrix[2][0] * frontServoVec_[0] +
+                  matrix[2][1] * frontServoVec_[1] +
+                  matrix[2][2] * frontServoVec_[2];
+    vecSum2_[0] = matrix[0][0] * leftServoVec_[0] +
+                  matrix[0][1] * leftServoVec_[1] +
+                  matrix[0][2] * leftServoVec_[2];
+    vecSum2_[1] = matrix[1][0] * leftServoVec_[0] +
+                  matrix[1][1] * leftServoVec_[1] +
+                  matrix[1][2] * leftServoVec_[2];
+    vecSum2_[2] = matrix[2][0] * leftServoVec_[0] +
+                  matrix[2][1] * leftServoVec_[1] +
+                  matrix[2][2] * leftServoVec_[2];
+    vecSum3_[0] = matrix[0][0] * rightServoVec_[0] +
+                  matrix[0][1] * rightServoVec_[1] +
+                  matrix[0][2] * rightServoVec_[2];
+    vecSum3_[1] = matrix[1][0] * rightServoVec_[0] +
+                  matrix[1][1] * rightServoVec_[1] +
+                  matrix[1][2] * rightServoVec_[2];
+    vecSum3_[2] = matrix[2][0] * rightServoVec_[0] +
+                  matrix[2][1] * rightServoVec_[1] +
+                  matrix[2][2] * rightServoVec_[2];
+    vecSum1_[0] = vecSum1_[0] - frontServoVec_[0];
+    vecSum1_[1] = vecSum1_[1] - frontServoVec_[1];
+    vecSum1_[2] = vecSum1_[2] - frontServoVec_[2];
+    vecSum2_[0] = vecSum2_[0] - leftServoVec_[0];
+    vecSum2_[1] = vecSum2_[1] - leftServoVec_[1];
+    vecSum2_[2] = vecSum2_[2] - leftServoVec_[2];
+    vecSum3_[0] = vecSum3_[0] - rightServoVec_[0];
+    vecSum3_[1] = vecSum3_[1] - rightServoVec_[1];
+    vecSum3_[2] = vecSum3_[2] - rightServoVec_[2];
+    vecSum1_[0] = vecSum1_[0] + platHeight_[0];
+    vecSum1_[1] = vecSum1_[1] + platHeight_[1];
+    vecSum1_[2] = vecSum1_[2] + platHeight_[2];
+    vecSum2_[0] = vecSum2_[0] + platHeight_[0];
+    vecSum2_[1] = vecSum2_[1] + platHeight_[1];
+    vecSum2_[2] = vecSum2_[2] + platHeight_[2];
+    vecSum3_[0] = vecSum3_[0] + platHeight_[0];
+    vecSum3_[1] = vecSum3_[1] + platHeight_[1];
+    vecSum3_[2] = vecSum3_[2] + platHeight_[2];
+    liFrontMag_ = sqrt((vecSum1_[0] * vecSum1_[0]) + (vecSum1_[1] * vecSum1_[1]) +
+                       (vecSum1_[2] * vecSum1_[2]));
+    liLeftMag_ = sqrt((vecSum2_[0] * vecSum2_[0]) + (vecSum2_[1] * vecSum2_[1]) +
+                      (vecSum2_[2] * vecSum2_[2]));
+    liRightMag_ = sqrt((vecSum3_[0] * vecSum3_[0]) + (vecSum3_[1] * vecSum3_[1]) +
+                       (vecSum3_[2] * vecSum3_[2]));
+    // Serial.print("Front height: ");
+    // Serial.println(liFrontMag_);
+    // Serial.print("Left height: ");
+    // Serial.println(liLeftMag_);
+    // Serial.print("Right height: ");
+    // Serial.println(liRightMag_);
 }
 
 // Repositions the servos to a predefined angle
 void platform::updateServos()
 {
-    moveTo(1, angles_[0]);
-    moveTo(2, angles_[1]);
-    moveTo(3, angles_[2]);
+    moveTo(1, servoAngles_[0]);
+    moveTo(2, servoAngles_[1]);
+    moveTo(3, servoAngles_[2]);
 }
