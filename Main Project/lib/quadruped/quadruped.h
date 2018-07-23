@@ -27,7 +27,7 @@ private:
   /* even nums (including 0) are hip servos, odd nums are tib-fem servos */
   Servo servos[8];
   /* stores angles of each servo */
-  float angles[8];
+  double angles[8];
   int pins_[8];
   /* dimensions of leg components in mm */
   const float femur_ = 49.5;

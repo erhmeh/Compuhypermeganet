@@ -66,6 +66,7 @@ void initQuadruped()
     int pins[] = {L4_1, L4_2, L3_1, L3_2, L2_1, L2_2, L1_1, L1_2};
     quad.setPins(pins);
     quad.attachServos();
+    quad.startingPosition();
 }
 
 // Initialises the platform servos and resets them to 45 degrees

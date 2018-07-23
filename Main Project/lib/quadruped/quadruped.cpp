@@ -4,6 +4,7 @@
 
 #define HIP_SERVO 0
 #define TIB_FEM_SERVO 1
+#define SERVO_DELAY 20
 
 /* Assigns pins */
 void quadruped::setPins(int pins[])
@@ -26,11 +27,32 @@ void quadruped::attachServos()
 /* Put quadruped in initial position (fully standing) */
 void quadruped::startingPosition()
 {
+    /* set coordinates */
     double x_0 = femur_ + coxa_/(sq(2)), y_0 = femur_ + coxa_/(sq(2)), z_0 = 0;
     double z_off = tibia_ - femur_/(sq(2));
-    position_t target_coodiante = {x_0, y_0, z_0};
-    double gamma = calculateAngle(target_coodiante, HIP_SERVO, z_off);
-    double alpha = calculateAngle(target_coodiante, TIB_FEM_SERVO, z_off);
+    position_t target_coodinate = {x_0, y_0, z_0};
+    /* calculate required angles */
+    double gamma = calculateAngle(target_coodinate, HIP_SERVO, z_off);
+    double alpha = calculateAngle(target_coodinate, TIB_FEM_SERVO, z_off);
+    Serial.print("Gamma: ");
+    Serial.print(gamma);
+    Serial.print("\n");
+    Serial.print("Alpha: ");
+    Serial.print(alpha);
+    Serial.print("\n");
+    for(int i = 0; i<7; i++)
+    {
+        if(!i || i%2==0) /* even numbered (hip servos) */
+        {
+            servos[i].write(gamma);
+            angles[i] = gamma;
+            delay(SERVO_DELAY);
+        } else { /* odd numbered (tib-fem servos) */
+            servos[i].write(alpha);
+            angles[i] = alpha;
+            delay(SERVO_DELAY);
+        }
+    }
 }
 
 /* Stand up from resting position */
