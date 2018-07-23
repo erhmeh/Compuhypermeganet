@@ -9,11 +9,11 @@
 #include "FlexiTimer2.h"
 #include "MatrixMath.h"
 #include "SD.h"
+#include "SDConfigFile.h"
 #include "SPI.h"
 #include "adxl337.h"
 #include "platform.h"
 #include "quadruped.h"
-#include "SDConfigFile.h"
 
 File alfredConfig;
 
@@ -66,6 +66,11 @@ float recentAccel[3];
 position_t current_coordinates[8];
 position_t target_coordinates[8];
 
+/* Stores config values*/
+bool quadEnable = false;
+bool platEnable = false;
+bool timerPeriod = 20;
+
 // Initialises quadruped and attaches servos
 void initQuadruped()
 {
@@ -82,20 +87,69 @@ void initPlatform()
   plat.initPlatform(pins);
 }
 
-// Updates the acceleration array when called by the timer
+// Loads the configuration file from the SD card
+void loadConfig()
+{
+  while (!SD.begin(BUILTIN_SDCARD))
+  {
+    DEBUG_PRINTLN("No SD-card.");
+    DEBUG_PRINTLN("Cannot find SD card. Please check that it is secured.");
+  }
+  SDConfigFile cfg;
+  if (!cfg.begin("alfred.cfg", 127))
+  {
+    DEBUG_PRINTLN("Failed to open config");
+    delay(1);
+    if (!cfg.begin("alfred.cfg", 127))
+    {
+      DEBUG_PRINTLN("Config file cannot be opened. Please regenerate it.");
+    }
+  }
+  while (cfg.readNextSetting())
+  {
+    if (cfg.nameIs("timerPeriod"))
+    {
+      timerPeriod = cfg.getIntValue();
+    }
+    if (cfg.nameIs("quadEnable"))
+    {
+      quadEnable = cfg.getBooleanValue();
+    }
+    if (cfg.nameIs("platEnable"))
+    {
+      platEnable = cfg.getBooleanValue();
+      DEBUG_PRINTLN("ON");
+    }
+  }
+  if (platEnable || quadEnable)
+  {
+    cfg.end();
+    return;
+  }
+}
+
+// Main code to execute (at 50hz)
 void tick()
 {
   digitalWrite(D1, HIGH);
-  accel.getAccel(recentAccel);
-  plat.calculateAngles(accel.getPitch(recentAccel), accel.getRoll(recentAccel));
-  DEBUG_PRINT("Servo Angles: ");
-  DEBUG_PRINT(" ");
-  DEBUG_PRINT(plat.servoAngles_[0]);
-  DEBUG_PRINT(" ");
-  DEBUG_PRINT(plat.servoAngles_[1]);
-  DEBUG_PRINT(" ");
-  DEBUG_PRINTLN(plat.servoAngles_[2]);
-  plat.updateServos();
+  if (platEnable)
+  {
+    accel.getAccel(recentAccel);
+    plat.calculateAngles(accel.getPitch(recentAccel),
+                         accel.getRoll(recentAccel));
+    DEBUG_PRINT("Servo Angles: ");
+    DEBUG_PRINT(" ");
+    DEBUG_PRINT(plat.servoAngles_[0]);
+    DEBUG_PRINT(" ");
+    DEBUG_PRINT(plat.servoAngles_[1]);
+    DEBUG_PRINT(" ");
+    DEBUG_PRINTLN(plat.servoAngles_[2]);
+    plat.updateServos();
+  }
+  if (quadEnable)
+  {
+    // @Pat your code here
+  }
   digitalWrite(D1, LOW);
 }
 
@@ -103,22 +157,22 @@ void tick()
 void setup()
 {
   Serial.begin(9600);
-  delay(2000);
-  Serial.print("Initializing SD card...");
-
-  if (!SD.begin(BUILTIN_SDCARD))
-  {
-    Serial.println("initialization failed!");
-    return;
-  }
-  Serial.println("initialization done.");
+  delay(5000);
+  loadConfig();
   pinMode(D1, OUTPUT);
   pinMode(D2, OUTPUT);
-  initPlatform();
+  if (platEnable)
+  {
+    initPlatform();
+  }
   randomSeed(analogRead(0));
-  initQuadruped();
-  FlexiTimer2::set(20, 1.0 / 1000, tick); // call every 200 1ms "ticks" (50hz)
-  FlexiTimer2::start();                   // start the timer
+  if (quadEnable)
+  {
+    initQuadruped();
+  }
+  FlexiTimer2::set(timerPeriod, 1.0 / 1000,
+                   tick); // call every 200 1ms "ticks" (50hz)
+  FlexiTimer2::start();   // start the timer
 }
 
 // main loop

@@ -15,7 +15,7 @@ void adxl337::takeScaledMeasurement()
     takeRawMeasurement();
     xScaled_ = mapf(xRaw_, xRawMin_, xRawMax_, -scale, scale);
     yScaled_ = mapf(yRaw_, yRawMin_, yRawMax_, -scale, scale);
-    zScaled_ = mapf(zRaw_, zRawMin_, zRawMax_, -scale, scale);
+    zScaled_ = -mapf(zRaw_, zRawMin_, zRawMax_, -scale, scale);
 }
 
 // Accepts a float* to an array and fills the array with the scaled values for

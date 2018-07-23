@@ -17,12 +17,12 @@ public:
 private:
   void attachServos(int *pins);
   double matrix[3][3];
-  const double frontServoVec_[3] = {0.0, -1.0, 0.0};
-  const double leftServoVec_[3] = {1.0, -1.0, 0.0};
-  const double rightServoVec_[3] = {-1.0, 1.0, 0.0};
-  const double platHeight_[3] = {0.0, 0.0, 3.0};
-  const double armLength_ = 1.0;
-  const double pistonLength_ = 1.0;
+  const double frontServoVec_[3] = {0.0, 84.5, 0.0};
+  const double leftServoVec_[3] = {-73.18, -42.25, 0.0};
+  const double rightServoVec_[3] = {73.18 -42.25, 0.0};
+  const double platHeight_[3] = {0.0, 0.0, 135.2};
+  const double armLength_ = 70.0;
+  const double pistonLength_ = 99.0;
   double calcAngle1_;
   double calcAngle2_;
   double calcAngle3_;

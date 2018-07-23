@@ -105,13 +105,13 @@ void platform::calculateAngles(double pitch, double roll)
                       (vecSum2_[2] * vecSum2_[2]));
     liRightMag_ = sqrt((vecSum3_[0] * vecSum3_[0]) + (vecSum3_[1] * vecSum3_[1]) +
                        (vecSum3_[2] * vecSum3_[2]));
-    e1_ = 45 + 57.2958 * cos(((liFrontMag_ * liFrontMag_) + (armLength_ * armLength_) -
+    e1_ = 57.2958 * cos(((liFrontMag_ * liFrontMag_) + (armLength_ * armLength_) -
                          (pistonLength_ * pistonLength_)) /
                         (2 * armLength_ * liFrontMag_));
-    e2_ = 45 + 57.2958 * cos(((liLeftMag_ * liLeftMag_) + (armLength_ * armLength_) -
+    e2_ = 57.2958 * cos(((liLeftMag_ * liLeftMag_) + (armLength_ * armLength_) -
                          (pistonLength_ * pistonLength_)) /
                         (2 * armLength_ * liLeftMag_));
-    e3_ = 45 + 57.2958 * cos(((liRightMag_ * liRightMag_) + (armLength_ * armLength_) -
+    e3_ = 57.2958 * cos(((liRightMag_ * liRightMag_) + (armLength_ * armLength_) -
                          (pistonLength_ * pistonLength_)) /
                         (2 * armLength_ * liRightMag_));
     // Serial.print("Front servo angle: ");
