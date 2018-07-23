@@ -15,7 +15,7 @@ public:
   void attachServos();
   void startingPosition();
   /* calculates required angle for servo, 0 for hip (gamma) and 1 for tib-fem (alpha) */
-  double calculateAngle(position_t target_effector_coordinate, int servo_type);
+  double calculateAngle(position_t target_effector_coordinate, int servo_type, double z_off);
   /* Movement functions */
   void standUp();
   void lowerDown();
