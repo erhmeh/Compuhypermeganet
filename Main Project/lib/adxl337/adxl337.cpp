@@ -18,17 +18,20 @@ void adxl337::takeScaledMeasurement()
     zScaled_ = mapf(zRaw_, zRawMin_, zRawMax_, -scale, scale);
 }
 
-// Accepts a float* to an array and fills the array with the scaled values for acceleration
+// Accepts a float* to an array and fills the array with the scaled values for
+// acceleration
 void adxl337::getAccel(float *result)
 {
-    takeScaledMeasurement(); // make sure that the value being returned is the most up to date
+    takeScaledMeasurement(); // make sure that the value being returned is the
+                             // most up to date
     result[0] = xScaled_;
     result[1] = yScaled_;
     result[2] = zScaled_;
 }
 
 // Map function (similar to native arduino) but using floating point values
-float adxl337::mapf(float x, float in_min, float in_max, float out_min, float out_max)
+float adxl337::mapf(float x, float in_min, float in_max, float out_min,
+                    float out_max)
 {
     return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }

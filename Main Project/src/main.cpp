@@ -12,7 +12,6 @@
 #include "platform.h"
 #include "quadruped.h"
 
-
 // Remove the Serial writing for faster processing
 #define DEBUG_PRINT(x) Serial.print(x)
 #define DEBUG_WRITE(x) Serial.write(x)
@@ -65,38 +64,41 @@ position_t target_coordinates[8];
 // Initialises quadruped and attaches servos
 void initQuadruped()
 {
-    int pins[] = {L4_1, L4_2, L3_1, L3_2, L2_1, L2_2, L1_1, L1_2};
-    quad.setPins(pins);
-    quad.attachServos();
-    quad.startingPosition();
+  int pins[] = {L4_1, L4_2, L3_1, L3_2, L2_1, L2_2, L1_1, L1_2};
+  quad.setPins(pins);
+  quad.attachServos();
+  quad.startingPosition();
 }
 
 // Initialises the platform servos and resets them to 45 degrees
-void initPlatform() {
+void initPlatform()
+{
   int pins[] = {S1, S2, S3};
   plat.initPlatform(pins);
 }
 
 // Updates the acceleration array when called by the timer
-void tick() {
+void tick()
+{
+  digitalWrite(D1, HIGH);
   accel.getAccel(recentAccel);
-  // plat.calculateAngles(accel.getPitch(recentAccel)    ,
-  // accel.getRoll(recentAccel));
+  plat.calculateAngles(accel.getPitch(recentAccel), accel.getRoll(recentAccel));
   plat.updateServos();
+  digitalWrite(D1, LOW);
 }
 
 // main setup
-void setup() {
+void setup()
+{
   Serial.begin(9600);
-  delay(10000);
   pinMode(D1, OUTPUT);
   pinMode(D2, OUTPUT);
   initPlatform();
   plat.calculateAngles(30.0, 60.0);
   randomSeed(analogRead(0));
   initQuadruped();
-  FlexiTimer2::set(200, 1.0 / 1000, tick); // call every 200 1ms "ticks" (50hz)
-  FlexiTimer2::start();                    // start the timer
+  FlexiTimer2::set(20, 1.0 / 1000, tick); // call every 200 1ms "ticks" (50hz)
+  FlexiTimer2::start();                   // start the timer
 }
 
 // main loop
