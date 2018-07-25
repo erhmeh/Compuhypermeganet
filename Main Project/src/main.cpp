@@ -153,8 +153,6 @@ void tick()
   digitalWrite(D1, LOW);
 }
 
-Servo tester;
-
 // main setup
 void setup()
 {
@@ -177,4 +175,7 @@ void setup()
 }
 
 // main loop
-void loop() {}
+void loop() {
+  accel.takeRawMeasurement();
+  delay(20);
+}
