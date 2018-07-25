@@ -37,9 +37,9 @@ File alfredConfig;
 #define L1_2 7
 
 /* Platform Servo Pins*/
-#define S1 12
+#define S1 25
 #define S2 24
-#define S3 25
+#define S3 12
 
 /* Digital IO Testing Pins */
 #define D1 13
@@ -159,7 +159,6 @@ Servo tester;
 void setup()
 {
   Serial.begin(9600);
-  // delay(5000);
   loadConfig();
   pinMode(D1, OUTPUT);
   pinMode(D2, OUTPUT);
@@ -167,35 +166,15 @@ void setup()
   {
     initPlatform();
   }
-
   randomSeed(analogRead(0));
   if (quadEnable)
   {
-    // initQuadruped();
+    initQuadruped();
   }
-  // pinMode(3, OUTPUT);
-  tester.attach(23);
-  plat.moveTo(1, 45);
-  plat.moveTo(2, 45);
-  plat.moveTo(3, 45);
-  delay(2000);
-  FlexiTimer2::set(250, 1.0 / 1000, tick); // call every 200 1ms "ticks" (50hz)
+  FlexiTimer2::set(timerPeriod, 1.0 / 1000,
+                   tick); // call every x 1ms "ticks" (50hz)
   FlexiTimer2::start();   // start the timer
-  // plat.moveTo(1, 0);
-  // plat.moveTo(2, 0);
-  // plat.moveTo(3, 0);
-  // delay(500);
-  // plat.moveTo(1, 45);
-  // plat.moveTo(2, 45);
-  // plat.moveTo(3, 45);
-  // delay(500);
-  // plat.moveTo(1, 90);
-  // plat.moveTo(2, 90);
-  // plat.moveTo(3, 90);
-  // delay(500);
 }
 
 // main loop
-void loop() {
-
-}
+void loop() {}

@@ -10,6 +10,7 @@ void platform::initPlatform(int *pins)
         moveTo(i, 45);
     }
     matrix[1][0] = 0.0;
+    delay(2000);
 }
 
 // Attaches pins. Parse a int[3] with the pin numbers in the order of 1 ->
