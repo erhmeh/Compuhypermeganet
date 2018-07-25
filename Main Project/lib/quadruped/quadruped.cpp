@@ -71,23 +71,23 @@ void quadruped::lowerDown()
     }
 }
 
-void quadruped::writeServos(double angle)
+void quadruped::writeServos(double angle, int servo)
 {
-    if(angles[i] < angle) 
+    if(angles_[servo] < angle) 
     { /* check if we need to decrement to or increase to angle */
-        for(int j = angles[i]; j<=angle; j++) 
+        for(int j = angles_[servo]; j<=angle; j++) 
         {
-            servos[i].write(angle);
+            servos_[servo].write(j);
             delay(SERVO_DELAY);
         }
-    } else if(angles[i] > angle) {
+    } else if(angles_[servo] > angle) {
         for(int k = angles[i]; k>=angle; k--) 
         {
-            servos[i].write(angle);
+            servos_[servo].write(k);
             delay(SERVO_DELAY);
         }
     }
-    angles[i] = angle;
+    angles_[i] = angle;
 }
 
 /* Move forward by specified number of steps */
