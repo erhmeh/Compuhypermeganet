@@ -22,7 +22,7 @@ void quadruped::attachServos()
 {
     for (int i = 0; i < 7; i++)
     {
-        servos[i].attach(pins_[i]);
+        servos_[i].attach(pins_[i]);
     }
 }
 
@@ -40,9 +40,9 @@ void quadruped::startingPosition()
     {
         if(!i || i%2==0) /* even numbered (hip servos) */
         {
-            writeServos(gamma);
+            writeServos(gamma, i);
         } else { /* odd numbered (tib-fem servos) */
-            writeServos(alpha);
+            writeServos(alpha, i);
         }
     }
 }
@@ -63,10 +63,10 @@ void quadruped::lowerDown()
     {
         if(!i || i%2==0) /* even numbered (hip servos) */
         {
-            writeServos(gamma);
+            writeServos(gamma, i);
             
         } else { /* odd numbered (tib-fem servos) */
-            writeServos(alpha);
+            writeServos(alpha, i);
         }
     }
 }
@@ -81,13 +81,13 @@ void quadruped::writeServos(double angle, int servo)
             delay(SERVO_DELAY);
         }
     } else if(angles_[servo] > angle) {
-        for(int k = angles[i]; k>=angle; k--) 
+        for(int k = angles_[servo]; k>=angle; k--) 
         {
             servos_[servo].write(k);
             delay(SERVO_DELAY);
         }
     }
-    angles_[i] = angle;
+    angles_[servo] = angle;
 }
 
 /* Move forward by specified number of steps */
