@@ -1,4 +1,5 @@
-// Header file for the Accelerometer. Further commenting on functionality in adxl337.cpp
+// Header file for the Accelerometer. Further commenting on functionality in
+// adxl337.cpp
 
 #ifndef adxl337_H
 #define adxl337_H
