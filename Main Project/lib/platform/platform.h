@@ -12,15 +12,29 @@ public:
   void calculateAngles(double pitch, double roll);
   void initPlatform(int *pins);
   void updateServos();
-  int angles_[3];
+  int servoAngles_[3];
 
 private:
-  double matrix[3][3];
-  const double frontServoDist_ = 1.0;
-  const double leftServoDist_ = 1.0;
-  const double rightServoDist_ = 1.0;
-  const double platHeight_ = 1.0;
   void attachServos(int *pins);
+  double matrix[3][3];
+  const double frontServoVec_[3] = {0.0, 84.5, 0.0};
+  const double leftServoVec_[3] = {-73.18, -42.25, 0.0};
+  const double rightServoVec_[3] = {73.18 -42.25, 0.0};
+  const double platHeight_[3] = {0.0, 0.0, 135.2};
+  const double armLength_ = 70.0;
+  const double pistonLength_ = 99.0;
+  double calcAngle1_;
+  double calcAngle2_;
+  double calcAngle3_;
+  double vecSum1_[3];
+  double vecSum2_[3];
+  double vecSum3_[3];
+  double liFrontMag_;
+  double liLeftMag_;
+  double liRightMag_;
+  double e1_;
+  double e2_;
+  double e3_;
   Servo frontServo_;
   Servo leftServo_;
   Servo rightServo_;
