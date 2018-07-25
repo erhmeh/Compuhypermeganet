@@ -7,6 +7,25 @@ void adxl337::takeRawMeasurement()
     xRaw_ = analogRead(A12);
     yRaw_ = analogRead(A13);
     zRaw_ = analogRead(A14);
+    delay(5);
+    xRaw_ += analogRead(A12);
+    yRaw_ += analogRead(A13);
+    zRaw_ += analogRead(A14);
+    delay(5);
+    xRaw_ += analogRead(A12);
+    yRaw_ += analogRead(A13);
+    zRaw_ += analogRead(A14);
+    delay(5);
+    xRaw_ += analogRead(A12);
+    yRaw_ += analogRead(A13);
+    zRaw_ += analogRead(A14);
+    delay(5);
+    xRaw_ += analogRead(A12);
+    yRaw_ += analogRead(A13);
+    zRaw_ += analogRead(A14);
+    xRaw_ = xRaw_ / 5;
+    yRaw_ = yRaw_ / 5;
+    zRaw_ = zRaw_ / 5;
 }
 
 // Scales the raw analogReadings into non-abstract values (ms^-2)
