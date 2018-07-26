@@ -180,7 +180,7 @@ void setup()
   plat.moveTo(3, 45);
   delay(2000);
   FlexiTimer2::set(250, 1.0 / 1000, tick); // call every 200 1ms "ticks" (50hz)
-  FlexiTimer2::start();   // start the timer
+  FlexiTimer2::start();                    // start the timer
   // plat.moveTo(1, 0);
   // plat.moveTo(2, 0);
   // plat.moveTo(3, 0);
@@ -196,6 +196,6 @@ void setup()
 }
 
 // main loop
-void loop() {
-
+void loop()
+{
 }
