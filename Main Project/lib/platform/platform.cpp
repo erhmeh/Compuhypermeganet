@@ -1,4 +1,5 @@
 #include "platform.h"
+#include <math.h>
 
 // Initialises the platform servos, attaches them and then moves them to 90
 // degrees
@@ -46,7 +47,7 @@ void platform::calculateAngles(double pitch, double roll)
     double pitchR = pitch * 1000 / 57296;
     double rollR = roll * 1000 / 57296;
 
-   //The full rotation matrix of the Platform relative to the Base (p-R-b)(1)
+    // The full rotation matrix of the Platform relative to the Base (p-R-b)(1)
     matrix[0][0] = cos(pitchR);
     matrix[0][1] = sin(pitchR) * sin(rollR);
     matrix[0][2] = cos(rollR) * sin(rollR);
@@ -57,7 +58,7 @@ void platform::calculateAngles(double pitch, double roll)
     matrix[2][1] = cos(pitchR) * sin(rollR);
     matrix[2][2] = cos(rollR) * cos(pitchR);
 
-   //(p-i)*(p-R-b) (2-1)
+    //(p-i)*(p-R-b) (2-1)
     vecSum1_[0] = matrix[0][0] * frontPlatVec_[0] +
                   matrix[0][1] * frontPlatVec_[1] +
                   matrix[0][2] * frontPlatVec_[2];
@@ -68,14 +69,11 @@ void platform::calculateAngles(double pitch, double roll)
                   matrix[2][1] * frontPlatVec_[1] +
                   matrix[2][2] * frontPlatVec_[2];
     vecSum2_[0] = matrix[0][0] * leftPlatVec_[0] +
-                  matrix[0][1] * leftPlatVec_[1] +
-                  matrix[0][2] * leftPlatVec_[2];
+                  matrix[0][1] * leftPlatVec_[1] + matrix[0][2] * leftPlatVec_[2];
     vecSum2_[1] = matrix[1][0] * leftPlatVec_[0] +
-                  matrix[1][1] * leftPlatVec_[1] +
-                  matrix[1][2] * leftPlatVec_[2];
+                  matrix[1][1] * leftPlatVec_[1] + matrix[1][2] * leftPlatVec_[2];
     vecSum2_[2] = matrix[2][0] * leftPlatVec_[0] +
-                  matrix[2][1] * leftPlatVec_[1] +
-                  matrix[2][2] * leftPlatVec_[2];
+                  matrix[2][1] * leftPlatVec_[1] + matrix[2][2] * leftPlatVec_[2];
     vecSum3_[0] = matrix[0][0] * rightPlatVec_[0] +
                   matrix[0][1] * rightPlatVec_[1] +
                   matrix[0][2] * rightPlatVec_[2];
@@ -86,69 +84,70 @@ void platform::calculateAngles(double pitch, double roll)
                   matrix[2][1] * rightPlatVec_[1] +
                   matrix[2][2] * rightPlatVec_[2];
 
-  ////////////(3)
+    ////////////(3)
 
-  
-    vecSum1_[0] = vecSum1_[0] - frontServoVec_[0];
-    vecSum1_[1] = vecSum1_[1] - frontServoVec_[1];
-    vecSum1_[2] = vecSum1_[2] - frontServoVec_[2];
-    vecSum2_[0] = vecSum2_[0] - leftServoVec_[0];
-    vecSum2_[1] = vecSum2_[1] - leftServoVec_[1];
-    vecSum2_[2] = vecSum2_[2] - leftServoVec_[2];
-    vecSum3_[0] = vecSum3_[0] - rightServoVec_[0];
-    vecSum3_[1] = vecSum3_[1] - rightServoVec_[1];
-    vecSum3_[2] = vecSum3_[2] - rightServoVec_[2];
-    
-    vecSum1_[0] = vecSum1_[0] + platHeight_[0];
-    vecSum1_[1] = vecSum1_[1] + platHeight_[1];
-    vecSum1_[2] = vecSum1_[2] + platHeight_[2];
-    vecSum2_[0] = vecSum2_[0] + platHeight_[0];
-    vecSum2_[1] = vecSum2_[1] + platHeight_[1];
-    vecSum2_[2] = vecSum2_[2] + platHeight_[2];
-    vecSum3_[0] = vecSum3_[0] + platHeight_[0];
-    vecSum3_[1] = vecSum3_[1] + platHeight_[1];
-    vecSum3_[2] = vecSum3_[2] + platHeight_[2];
+    vec2Sum1_[0] = vecSum1_[0] - frontServoVec_[0];
+    vec2Sum1_[1] = vecSum1_[1] - frontServoVec_[1];
+    vec2Sum1_[2] = vecSum1_[2] - frontServoVec_[2];
+    vec2Sum2_[0] = vecSum2_[0] - leftServoVec_[0];
+    vec2Sum2_[1] = vecSum2_[1] - leftServoVec_[1];
+    vec2Sum2_[2] = vecSum2_[2] - leftServoVec_[2];
+    vec2Sum3_[0] = vecSum3_[0] - rightServoVec_[0];
+    vec2Sum3_[1] = vecSum3_[1] - rightServoVec_[1];
+    vec2Sum3_[2] = vecSum3_[2] - rightServoVec_[2];
 
+    vec3Sum1_[0] = vec2Sum1_[0] + platHeight_[0];
+    vec3Sum1_[1] = vec2Sum1_[1] + platHeight_[1];
+    vec3Sum1_[2] = vec2Sum1_[2] + platHeight_[2];
+    vec3Sum2_[0] = vec2Sum2_[0] + platHeight_[0];
+    vec3Sum2_[1] = vec2Sum2_[1] + platHeight_[1];
+    vec3Sum2_[2] = vec2Sum2_[2] + platHeight_[2];
+    vec3Sum3_[0] = vec2Sum3_[0] + platHeight_[0];
+    vec3Sum3_[1] = vec2Sum3_[1] + platHeight_[1];
+    vec3Sum3_[2] = vec2Sum3_[2] + platHeight_[2];
 
+    M1_ = 2 * 70 * (vecSum1_[2] - frontServoVec_[2]);
+    M2_ = 2 * 70 * (vecSum2_[2] - leftServoVec_[2]);
+    M3_ = 2 * 70 * (vecSum3_[2] - rightServoVec_[2]);
 
-    /////
+    N1_ = 2 * 70 *
+          (cos((60.0 * 1000.0) / 57296.0) * (vecSum1_[0] - frontServoVec_[0]) +
+           sin((60.0 * 1000.0) / 57296.0) * (vecSum1_[1] - frontServoVec_[1]));
+    N2_ = 2 * 70 *
+          (cos((60.0 * 1000.0) / 57296.0) * (vecSum2_[0] - leftServoVec_[0]) +
+           sin((60.0 * 1000.0) / 57296.0) * (vecSum2_[1] - leftServoVec_[1]));
+    N3_ = 2 * 70 *
+          (cos((60.0 * 1000.0) / 57296.0) * (vecSum3_[0] - rightServoVec_[0]) +
+           sin((60.0 * 1000.0) / 57296.0) * (vecSum3_[1] - rightServoVec_[1]));
+    double i1 = sqrt(vec3Sum1_[0] * vec3Sum1_[0] + vec3Sum1_[1] * vec3Sum1_[1] +
+                     vec3Sum1_[2] * vec3Sum1_[2]);
+    alfa1_ = asin(i1 / (sqrt((M1_ * M1_) + (N1_ * N1_))) - atan(N1_ / M1_)) * 57296 / 1000;
+    double i2 = sqrt(vec3Sum2_[0] * vec3Sum2_[0] + vec3Sum2_[1] * vec3Sum2_[1] + vec3Sum2_[2] * vec3Sum2_[2]);
+    alfa2_ = asin(i2 / (sqrt((M2_ * M2_) + (N2_ * N2_))) - atan((N2_ / M2_)) ;
+    alfa3_ = asin(((vec3Sum3_[0] * vec3Sum3_[0]) + (vec3Sum3_[1] * vec3Sum3_[1]) +
+                   (vec3Sum3_[2] * vec3Sum3_[2])) /
+                  sqrt((M3_ * M3_) + (N3_ * N3_))) -
+             atan((N3_ / M3_));
 
+    /*   liFrontMag_ = sqrt((vecSum1_[0] * vecSum1_[0]) + (vecSum1_[1] *
+vecSum1_[1]) +
+                   (vecSum1_[2] * vecSum1_[2]));
+liLeftMag_ = sqrt((vecSum2_[0] * vecSum2_[0]) + (vecSum2_[1] * vecSum2_[1]) +
+                  (vecSum2_[2] * vecSum2_[2]));
+liRightMag_ = sqrt((vecSum3_[0] * vecSum3_[0]) + (vecSum3_[1] * vecSum3_[1]) +
+                   (vecSum3_[2] * vecSum3_[2]));
+e1_ = 57.2958 * cos(((liFrontMag_ * liFrontMag_) + (armLength_ * armLength_) -
+                     (pistonLength_ * pistonLength_)) /
+                    (2 * armLength_ * liFrontMag_));
+e2_ = 57.2958 * cos(((liLeftMag_ * liLeftMag_) + (armLength_ * armLength_) -
+                     (pistonLength_ * pistonLength_)) /
+                    (2 * armLength_ * liLeftMag_));
+e3_ = 57.2958 * cos(((liRightMag_ * liRightMag_) + (armLength_ * armLength_) -
+                     (pistonLength_ * pistonLength_)) /
+                    (2 * armLength_ * liRightMag_));
 
-  M1_ = 2*70*(frontPlatVec_[2]-frontServoVec_[2]);
-  M2_ = 2*70*(leftPlatVec_[2]-leftServoVec_[2]);
-  M3_ = 2*70*(rightPlatVec_[2]-rightServoVec_[2]);
+*/
 
-
-  N1_ = 2*70*(cos(60)*(frontPlatVec_[0]-frontServoVec_[0])+sin(60)*(frontPlatVec_[1]-frontServoVec_[1]));
-  N2_ = 2*70*(cos(60)*(leftPlatVec_[0]-leftServoVec_[0])+sin(60)*(leftPlatVec_[1]-leftServoVec_[1]));
-  N3_ = 2*70*(cos(60)*(rightPlatVec_[0]-rightServoVec_[0])+sin(60)*(rightPlatVec_[1]-rightServoVec_[1]));
-
-
-  alfa1_ = asin(((vecSum1_[0]*vecSum1_[0])+(vecSum1_[1]*vecSum1_[1])+(vecSum1_[2]*vecSum1_[2]))/sqrt((M1_*M1_)+(N1_*N1_)))-atan((N1_/M1_));
-  alfa2_ = asin(((vecSum2_[0]*vecSum2_[0])+(vecSum2_[1]*vecSum2_[1])+(vecSum2_[2]*vecSum2_[2]))/sqrt((M2_*M2_)+(N2_*N2_)))-atan((N2_/M2_));
-  alfa3_ = asin(((vecSum3_[0]*vecSum3_[0])+(vecSum3_[1]*vecSum3_[1])+(vecSum3_[2]*vecSum3_[2]))/sqrt((M3_*M3_)+(N3_*N3_)))-atan((N3_/M3_));
-    
-
-    
-/*   liFrontMag_ = sqrt((vecSum1_[0] * vecSum1_[0]) + (vecSum1_[1] * vecSum1_[1]) +
-                       (vecSum1_[2] * vecSum1_[2]));
-    liLeftMag_ = sqrt((vecSum2_[0] * vecSum2_[0]) + (vecSum2_[1] * vecSum2_[1]) +
-                      (vecSum2_[2] * vecSum2_[2]));
-    liRightMag_ = sqrt((vecSum3_[0] * vecSum3_[0]) + (vecSum3_[1] * vecSum3_[1]) +
-                       (vecSum3_[2] * vecSum3_[2]));
-    e1_ = 57.2958 * cos(((liFrontMag_ * liFrontMag_) + (armLength_ * armLength_) -
-                         (pistonLength_ * pistonLength_)) /
-                        (2 * armLength_ * liFrontMag_));
-    e2_ = 57.2958 * cos(((liLeftMag_ * liLeftMag_) + (armLength_ * armLength_) -
-                         (pistonLength_ * pistonLength_)) /
-                        (2 * armLength_ * liLeftMag_));
-    e3_ = 57.2958 * cos(((liRightMag_ * liRightMag_) + (armLength_ * armLength_) -
-                         (pistonLength_ * pistonLength_)) /
-                        (2 * armLength_ * liRightMag_));
-
- */
-
- 
     // Serial.print("Front servo angle: ");
     // Serial.println(e1_);
     // Serial.print("Left servo angle: ");
@@ -158,6 +157,13 @@ void platform::calculateAngles(double pitch, double roll)
     servoAngles_[0] = alfa1_;
     servoAngles_[1] = alfa2_;
     servoAngles_[2] = alfa3_;
+    Serial.print("Angle 1: ");
+    Serial.println(alfa1_);
+    Serial.print("Angle 2: ");
+    Serial.println(alfa2_);
+    Serial.print("Angle 3: ");
+    Serial.println(
+        asin(i1 / (sqrt((M1_ * M1_) + (N1_ * N1_))) - atan(N1_ / M1_)) * 57296 / 1000);
 }
 
 // Repositions the servos to a predefined angle
@@ -167,4 +173,3 @@ void platform::updateServos()
     moveTo(2, servoAngles_[1]);
     moveTo(3, servoAngles_[2]);
 }
-

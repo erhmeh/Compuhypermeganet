@@ -18,15 +18,15 @@ private:
   void attachServos(int *pins);
   double matrix[3][3];
 
-  const double frontServoHornVec_[3] = { - 90.23, 0.0, 4.02}; //a1_0
+  const double frontServoHornVec_[3] = {-90.23, 0.0, 4.02}; //a1_0
   const double leftServoHornVec_[3] = {45.12, 78.15, 4.02};  //a2_0
   const double rightServoHornVec_[3] = {45.12, -78.15, 4.02};//a3_0
 
-  const double frontServoVec_[3] = { - 84.5, 0.0, 0.0}; //b1_0
+  const double frontServoVec_[3] = {-84.5, 0.0, 0.0}; //b1_0
   const double leftServoVec_[3] = {42.25, 73.18, 0.0};  //b2_0
   const double rightServoVec_[3] = {42.25, -73.18, 0.0};//b3_0
 
-  const double frontPlatVec_[3] = { - 84.5, 0.0, 122.1}; //p1_0
+  const double frontPlatVec_[3] = {-84.5, 0.0, 122.1}; //p1_0
   const double leftPlatVec_[3] = {42.25, 73.18, 122.1};  //p2_0
   const double rightPlatVec_[3] = {42.25, -73.18, 122.1};//p3_0
   
@@ -42,6 +42,12 @@ private:
   double vecSum1_[3];
   double vecSum2_[3];
   double vecSum3_[3];
+  double vec2Sum1_[3];
+  double vec2Sum2_[3];
+  double vec2Sum3_[3];
+  double vec3Sum1_[3];
+  double vec3Sum2_[3];
+  double vec3Sum3_[3];
   double M1_;
   double M2_;
   double M3_;
