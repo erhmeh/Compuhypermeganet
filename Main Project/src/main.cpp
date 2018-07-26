@@ -163,9 +163,13 @@ void setup()
   }
   // pinMode(3, OUTPUT);
   delay(2000);
-  FlexiTimer2::set(250, 1.0 / 1000, tick); // call every 200 1ms "ticks" (50hz)
+  FlexiTimer2::set(500, 1.0 / 1000, tick); // call every 200 1ms "ticks" (50hz)
   FlexiTimer2::start();                    // start the timer
 }
 
 // main loop
-void loop() {}
+void loop() {
+  // plat.moveTo(1, 35);
+  // plat.moveTo(2, 35);
+  // plat.moveTo(3, 35);
+}
