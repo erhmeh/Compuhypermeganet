@@ -22,7 +22,7 @@ void adxl337::takeScaledMeasurement()
     zRaw_ = 0;
     xScaled_ = mapf(xRaw_, xRawMin_, xRawMax_, -scale, scale);
     yScaled_ = mapf(yRaw_, yRawMin_, yRawMax_, -scale, scale);
-    zScaled_ = -mapf(zRaw_, zRawMin_, zRawMax_, -scale, scale);
+    zScaled_ = mapf(zRaw_, zRawMin_, zRawMax_, -scale, scale);
 }
 
 // Accepts a float* to an array and fills the array with the scaled values for
@@ -49,7 +49,7 @@ float adxl337::getPitch(float *accel)
 {
     float pitch = atan(accel[0] / sqrt(pow(accel[1], 2) + pow(accel[2], 2)));
     pitch = pitch * (180.0 / PI);
-    return pitch;
+    return pitch - 6;
 }
 
 // Parse the accelerometer array and return the roll in degrees

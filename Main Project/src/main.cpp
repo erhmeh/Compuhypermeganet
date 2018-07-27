@@ -132,7 +132,7 @@ void loadConfig()
 void tick()
 {
   digitalWrite(D1, HIGH);
-  if (platEnable)
+  if (true)
   {
     accel.getAccel(recentAccel);
     plat.calculateAngles(accel.getPitch(recentAccel),
@@ -146,10 +146,6 @@ void tick()
     DEBUG_PRINTLN(plat.servoAngles_[2]);
     plat.updateServos();
   }
-  if (quadEnable)
-  {
-    // @Pat your code here
-  }
   digitalWrite(D1, LOW);
 }
 
@@ -157,25 +153,19 @@ void tick()
 void setup()
 {
   Serial.begin(9600);
-  loadConfig();
+
+  // delay(5000);
+  // loadConfig();
   pinMode(D1, OUTPUT);
   pinMode(D2, OUTPUT);
+  initPlatform();
   if (platEnable)
-  {
-    initPlatform();
-  }
-  randomSeed(analogRead(0));
-  if (quadEnable)
-  {
-    initQuadruped();
-  }
-  FlexiTimer2::set(timerPeriod, 1.0 / 1000,
-                   tick); // call every x 1ms "ticks" (50hz)
-  FlexiTimer2::start();   // start the timer
-}
+  {}
+  // pinMode(3, OUTPUT);
+  delay(2000);
+  FlexiTimer2::set(333, 1.0 / 1000, tick); // call every 200 1ms "ticks" (50hz)
+  FlexiTimer2::start();                    // start the timer
+ }
 
 // main loop
-void loop() {
-  accel.takeRawMeasurement();
-  delay(20);
-}
+void loop() {}
