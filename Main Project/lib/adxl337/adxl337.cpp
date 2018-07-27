@@ -61,7 +61,7 @@ float adxl337::getPitch(float *accel)
 {
     float pitch = atan(accel[0] / sqrt(pow(accel[1], 2) + pow(accel[2], 2)));
     pitch = pitch * (180.0 / PI);
-    return pitch;
+    return pitch - 6;
 }
 
 // Parse the accelerometer array and return the roll in degrees

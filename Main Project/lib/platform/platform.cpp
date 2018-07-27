@@ -90,26 +90,26 @@ void platform::calculateAngles(double pitch, double roll)
 
     ////////////(3)
 
-    vec2Sum1_[0] = vecSum1_[0] - frontServoVec_[0];
-    vec2Sum1_[1] = vecSum1_[1] - frontServoVec_[1];
-    vec2Sum1_[2] = vecSum1_[2] - frontServoVec_[2];
-    vec2Sum2_[0] = vecSum2_[0] - leftServoVec_[0];
-    vec2Sum2_[1] = vecSum2_[1] - leftServoVec_[1];
-    vec2Sum2_[2] = vecSum2_[2] - leftServoVec_[2];
-    vec2Sum3_[0] = vecSum3_[0] - rightServoVec_[0];
-    vec2Sum3_[1] = vecSum3_[1] - rightServoVec_[1];
-    vec2Sum3_[2] = vecSum3_[2] - rightServoVec_[2];
+    vec2Sum1_[0] = platHeight_[0] + vecSum1_[0];
+    vec2Sum1_[1] = platHeight_[1] + vecSum1_[1];
+    vec2Sum1_[2] = platHeight_[2] + vecSum1_[2];
+    vec2Sum2_[0] = platHeight_[0] + vecSum2_[0];
+    vec2Sum2_[1] = platHeight_[1] + vecSum2_[1];
+    vec2Sum2_[2] = platHeight_[2] + vecSum2_[2];
+    vec2Sum3_[0] = platHeight_[0] + vecSum2_[0];
+    vec2Sum3_[1] = platHeight_[1] + vecSum3_[1];
+    vec2Sum3_[2] = platHeight_[2] + vecSum3_[2];
 
-    vec3Sum1_[0] = vec2Sum1_[0] + platHeight_[0];
-    vec3Sum1_[1] = vec2Sum1_[1] + platHeight_[1];
-    vec3Sum1_[2] = vec2Sum1_[2] + platHeight_[2];
-    vec3Sum2_[0] = vec2Sum2_[0] + platHeight_[0];
-    vec3Sum2_[1] = vec2Sum2_[1] + platHeight_[1];
-    vec3Sum2_[2] = vec2Sum2_[2] + platHeight_[2];
-    vec3Sum3_[0] = vec2Sum3_[0] + platHeight_[0];
-    vec3Sum3_[1] = vec2Sum3_[1] + platHeight_[1];
-    vec3Sum3_[2] = vec2Sum3_[2] + platHeight_[2];
-/*
+    vec3Sum1_[0] = vec2Sum1_[0] - frontServoVec_[0];
+    vec3Sum1_[1] = vec2Sum1_[1] - frontServoVec_[1];
+    vec3Sum1_[2] = vec2Sum1_[2] - frontServoVec_[2];
+    vec3Sum2_[0] = vec2Sum2_[0] - leftServoVec_[0];
+    vec3Sum2_[1] = vec2Sum2_[1] - leftServoVec_[11];
+    vec3Sum2_[2] = vec2Sum2_[2] - leftServoVec_[2];
+    vec3Sum3_[0] = vec2Sum3_[0] - rightServoVec_[0];
+    vec3Sum3_[1] = vec2Sum3_[1] - rightServoVec_[1];
+    vec3Sum3_[2] = vec2Sum3_[2] - rightServoVec_[2];
+    /*
     M1_ = 2 * 70 * (vecSum1_[2] - frontServoVec_[2]);
     M2_ = 2 * 70 * (vecSum2_[2] - leftServoVec_[2]);
     M3_ = 2 * 70 * (vecSum3_[2] - rightServoVec_[2]);
@@ -136,13 +136,16 @@ void platform::calculateAngles(double pitch, double roll)
     alfa3_ = asin(i3 / sqrt((M3_ * M3_) + (N3_ * N3_))) -
              atan((N3_ / M3_)) * 57296 / 1000;
 
-    */         
-         double i1 = vec3Sum1_[0] * vec3Sum1_[0] + vec3Sum1_[1] * vec3Sum1_[1] + vec3Sum1_[2] * vec3Sum1_[2];
-  alfa1_ = acos((i1-14699.02)/13858.6)* 57296 / 1000;
-     double i2 = vec3Sum2_[0] * vec3Sum2_[0] + vec3Sum2_[1] * vec3Sum2_[1] + vec3Sum2_[2] * vec3Sum2_[2];
-  alfa2_ = acos((i2-14699.02)/13858.6)* 57296 / 1000;
-     double i3 = vec3Sum3_[0] * vec3Sum3_[0] + vec3Sum3_[1] * vec3Sum3_[1] + vec3Sum3_[2] * vec3Sum3_[2];
-  alfa3_ = acos((i3-14699.02)/13858.6)* 57296 / 1000;
+    */
+    double l1 = vec3Sum1_[0] * vec3Sum1_[0] + vec3Sum1_[1] * vec3Sum1_[1] + vec3Sum1_[2] * vec3Sum1_[2];
+    double i1 = (14699.02 - l1) / 13858.6;
+     alfa1_ = acos(i1) * 57296 / 1000;
+    double l2 = vec3Sum2_[0] * vec3Sum2_[0] + vec3Sum2_[1] * vec3Sum2_[1] + vec3Sum2_[2] * vec3Sum2_[2];
+    double i2 = (14699.02 - l2) / 13858.6;
+     alfa2_ = acos(i2) * 57296 / 1000;
+    double l3 = vec3Sum3_[0] * vec3Sum3_[0] + vec3Sum3_[1] * vec3Sum3_[1] + vec3Sum3_[2] * vec3Sum3_[2];
+    double i3 = (14699.02 - l3) / 13858.6;
+     alfa3_ = acos(i3) * 57296 / 1000;
 
     /*   liFrontMag_ = sqrt((vecSum1_[0] * vecSum1_[0]) + (vecSum1_[1] *
 vecSum1_[1]) +
@@ -169,13 +172,13 @@ e3_ = 57.2958 * cos(((liRightMag_ * liRightMag_) + (armLength_ * armLength_) -
     // Serial.println(e2_);
     // Serial.print("Right servo angle: ");
     // Serial.println(e3_);
-    servoAngles_[0] = 35 + alfa1_;
-    servoAngles_[1] = 35 + alfa2_;
-    servoAngles_[2] = 35 + alfa3_;
+    servoAngles_[0] =  alfa1_ - 45;
+    servoAngles_[1] =  alfa2_ - 65;
+    servoAngles_[2] =  alfa3_ - 45;
     Serial.print("Angle 1: ");
-    Serial.println(alfa1_);
+    Serial.println(l3);
     Serial.print("Angle 2: ");
-    Serial.println(alfa2_);
+    Serial.println(i3);
     Serial.print("Angle 3: ");
     Serial.println(alfa3_);
 }

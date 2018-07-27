@@ -26,9 +26,9 @@ private:
   const double leftServoVec_[3] = {42.25, 73.18, 0.0};  //b2_0
   const double rightServoVec_[3] = {42.25, -73.18, 0.0};//b3_0
 
-  const double frontPlatVec_[3] = {-84.5, 0.0, 122.1}; //p1_0
-  const double leftPlatVec_[3] = {42.25, 73.18, 122.1};  //p2_0
-  const double rightPlatVec_[3] = {42.25, -73.18, 122.1};//p3_0
+  const double frontPlatVec_[3] = {-84.5, 0.0, 0.0}; //p1_0
+  const double leftPlatVec_[3] = {42.25, 73.18, 0.0};  //p2_0
+  const double rightPlatVec_[3] = {42.25, -73.18, 0.0};//p3_0
   
   const double platHeight_[3] = {0.0, 0.0, 122.1};      //T_0
   const double armLength_ = 70.0;                       //a_0
