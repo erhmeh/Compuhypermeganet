@@ -109,7 +109,7 @@ void platform::calculateAngles(double pitch, double roll)
     vec3Sum3_[0] = vec2Sum3_[0] + platHeight_[0];
     vec3Sum3_[1] = vec2Sum3_[1] + platHeight_[1];
     vec3Sum3_[2] = vec2Sum3_[2] + platHeight_[2];
-
+/*
     M1_ = 2 * 70 * (vecSum1_[2] - frontServoVec_[2]);
     M2_ = 2 * 70 * (vecSum2_[2] - leftServoVec_[2]);
     M3_ = 2 * 70 * (vecSum3_[2] - rightServoVec_[2]);
@@ -135,6 +135,14 @@ void platform::calculateAngles(double pitch, double roll)
                      vec3Sum3_[2] * vec3Sum3_[2]);
     alfa3_ = asin(i3 / sqrt((M3_ * M3_) + (N3_ * N3_))) -
              atan((N3_ / M3_)) * 57296 / 1000;
+
+    */         
+         double i1 = vec3Sum1_[0] * vec3Sum1_[0] + vec3Sum1_[1] * vec3Sum1_[1] + vec3Sum1_[2] * vec3Sum1_[2];
+  alfa1_ = acos((i1-14699.02)/13858.6)* 57296 / 1000;
+     double i2 = vec3Sum2_[0] * vec3Sum2_[0] + vec3Sum2_[1] * vec3Sum2_[1] + vec3Sum2_[2] * vec3Sum2_[2];
+  alfa2_ = acos((i2-14699.02)/13858.6)* 57296 / 1000;
+     double i3 = vec3Sum3_[0] * vec3Sum3_[0] + vec3Sum3_[1] * vec3Sum3_[1] + vec3Sum3_[2] * vec3Sum3_[2];
+  alfa3_ = acos((i3-14699.02)/13858.6)* 57296 / 1000;
 
     /*   liFrontMag_ = sqrt((vecSum1_[0] * vecSum1_[0]) + (vecSum1_[1] *
 vecSum1_[1]) +
