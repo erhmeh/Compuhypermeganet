@@ -37,9 +37,9 @@ File alfredConfig;
 #define L1_2 7
 
 /* Platform Servo Pins*/
-#define S1 12
+#define S1 25
 #define S2 24
-#define S3 25
+#define S3 12
 
 /* Digital IO Testing Pins */
 #define D1 13
@@ -153,14 +153,14 @@ void tick()
 void setup()
 {
   Serial.begin(9600);
+
   // delay(5000);
   // loadConfig();
   pinMode(D1, OUTPUT);
   pinMode(D2, OUTPUT);
   initPlatform();
   if (platEnable)
-  {
-  }
+  {}
   // pinMode(3, OUTPUT);
   delay(2000);
   FlexiTimer2::set(333, 1.0 / 1000, tick); // call every 200 1ms "ticks" (50hz)
@@ -168,8 +168,4 @@ void setup()
  }
 
 // main loop
-void loop() {
-  // plat.moveTo(1, 45);
-  // plat.moveTo(2, 45);
-  // plat.moveTo(3, 45);
-}
+void loop() {}

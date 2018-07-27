@@ -4,34 +4,22 @@
 // Takes an analog reading of each pin and sets their values
 void adxl337::takeRawMeasurement()
 {
-    xRaw_ = analogRead(A12);
-    yRaw_ = analogRead(A13);
-    zRaw_ = analogRead(A14);
-    delay(5);
     xRaw_ += analogRead(A12);
     yRaw_ += analogRead(A13);
     zRaw_ += analogRead(A14);
-    delay(5);
-    xRaw_ += analogRead(A12);
-    yRaw_ += analogRead(A13);
-    zRaw_ += analogRead(A14);
-    delay(5);
-    xRaw_ += analogRead(A12);
-    yRaw_ += analogRead(A13);
-    zRaw_ += analogRead(A14);
-    delay(5);
-    xRaw_ += analogRead(A12);
-    yRaw_ += analogRead(A13);
-    zRaw_ += analogRead(A14);
-    xRaw_ = xRaw_ / 5;
-    yRaw_ = yRaw_ / 5;
-    zRaw_ = zRaw_ / 5;
+    numOfMeasurements++;
 }
 
 // Scales the raw analogReadings into non-abstract values (ms^-2)
 void adxl337::takeScaledMeasurement()
 {
-    takeRawMeasurement();
+    xRaw_ = xRaw_ / numOfMeasurements;
+    yRaw_ = yRaw_ / numOfMeasurements;
+    zRaw_ = zRaw_ / numOfMeasurements;
+    numOfMeasurements = 0;
+    xRaw_ = 0;
+    yRaw_ = 0;
+    zRaw_ = 0;
     xScaled_ = mapf(xRaw_, xRawMin_, xRawMax_, -scale, scale);
     yScaled_ = mapf(yRaw_, yRawMin_, yRawMax_, -scale, scale);
     zScaled_ = mapf(zRaw_, zRawMin_, zRawMax_, -scale, scale);
